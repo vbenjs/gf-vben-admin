@@ -19,7 +19,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal } = useMessage();
+const { createMessage, createErrorModal,notification } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -52,35 +52,49 @@ const transform: AxiosTransform = {
 
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
-    if (hasSuccess) {
+    if (!hasSuccess) {
+      if (message) {
+        // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
+        if (options.errorMessageMode === 'modal') {
+          createErrorModal({ title: t('sys.api.errorTip'), content: message });
+        } else if (options.errorMessageMode === 'message') {
+          createMessage.error(message);
+        }
+      }
+      Promise.reject(new Error(message));
+      return message;
+    }
+
+    // 接口请求成功，直接返回结果
+    if (code === ResultEnum.SUCCESS) {
+      if (message) {
+        notification.success({ message });
+      }
       return result;
     }
-
-    // 在此处根据自己项目的实际情况对不同的code执行不同的操作
-    // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-    let timeoutMsg = '';
-    switch (code) {
-      case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage');
-        const userStore = useUserStoreWithOut();
-        userStore.setToken(undefined);
-        userStore.logout(true);
-        break;
-      default:
-        if (message) {
-          timeoutMsg = message;
-        }
+    // 接口请求错误，统一提示错误信息
+    if (code === ResultEnum.ERROR) {
+      if (message) {
+        createMessage.error(data.message);
+        Promise.reject(new Error(message));
+      } else {
+        const msg = t('sys.api.errorMessage');
+        createMessage.error(msg);
+        Promise.reject(new Error(msg));
+      }
+      throw new Error( t('sys.api.apiRequestFailed'));
     }
-
-    // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-    // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
-    } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg);
+    // 登录超时
+    if (code === ResultEnum.TIMEOUT) {
+      const timeoutMsg = t('sys.api.timeoutMessage');
+      createErrorModal({
+        title: t('sys.api.operationFailed'),
+        content: timeoutMsg,
+      });
+      Promise.reject(new Error(timeoutMsg));
+      return message;
     }
-
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    return message;
   },
 
   // 请求之前处理config
@@ -199,7 +213,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
         // authentication schemes，e.g: Bearer
         // authenticationScheme: 'Bearer',
-        authenticationScheme: '',
+        authenticationScheme: 'Bearer',
         timeout: 10 * 1000,
         // 基础接口地址
         // baseURL: globSetting.apiUrl,

@@ -95,15 +95,8 @@ export const useUserStore = defineStore({
 
         // save token
         this.setToken(token);
-        return this.afterLoginAction(goHome);
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    },
-    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
-      if (!this.getToken) return null;
-      // get user info
-      const userInfo = await this.getUserInfoAction();
+        // get user info
+        const userInfo = await this.getUserInfoAction();
 
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
@@ -121,19 +114,13 @@ export const useUserStore = defineStore({
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
       return userInfo;
-    },
-    async getUserInfoAction(): Promise<UserInfo | null> {
-      if (!this.getToken) return null;
+    }},
+    async getUserInfoAction() {
       const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        this.setRoleList(roleList);
-      } else {
-        userInfo.roles = [];
-        this.setRoleList([]);
-      }
+      const { roles } = userInfo;
+      const roleList = roles.map((item) => item.value) as RoleEnum[];
       this.setUserInfo(userInfo);
+      this.setRoleList(roleList);
       return userInfo;
     },
     /**
