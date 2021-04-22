@@ -1,20 +1,8 @@
 <template>
   <LoginFormTitle v-show="getShow" class="enter-x" />
-  <Form
-    class="p-4 enter-x"
-    :model="formData"
-    :rules="getFormRules"
-    ref="formRef"
-    v-show="getShow"
-    @keypress.enter="handleLogin"
-  >
+  <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef" v-show="getShow">
     <FormItem name="account" class="enter-x">
-      <Input
-        size="large"
-        v-model:value="formData.account"
-        :placeholder="t('sys.login.userName')"
-        class="fix-auto-fill"
-      />
+      <Input size="large" v-model:value="formData.account" :placeholder="t('sys.login.userName')" />
     </FormItem>
     <FormItem name="password" class="enter-x">
       <InputPassword
