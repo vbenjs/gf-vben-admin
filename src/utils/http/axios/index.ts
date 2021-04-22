@@ -24,7 +24,7 @@ import { createNow, formatRequestDate } from './helper';
 
 const globSetting = useGlobSetting();
 const prefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal } = useMessage();
+const { createMessage, createErrorModal, notification } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -68,6 +68,9 @@ const transform: AxiosTransform = {
 
     // 接口请求成功，直接返回结果
     if (code === ResultEnum.SUCCESS) {
+      if (message) {
+        notification.success({ message });
+      }
       return result;
     }
     // 接口请求错误，统一提示错误信息
@@ -141,7 +144,7 @@ const transform: AxiosTransform = {
     const token = getToken();
     if (token) {
       // jwt token
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
