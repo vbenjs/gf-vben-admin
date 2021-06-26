@@ -38,7 +38,7 @@ export const useMultipleTabStore = defineStore({
     lastDragEndIndex: 0,
   }),
   getters: {
-    getTabList() {
+    getTabList(): RouteLocationNormalized[] {
       return this.tabList;
     },
     getCachedTabList(): string[] {
@@ -60,7 +60,7 @@ export const useMultipleTabStore = defineStore({
         // Ignore the cache
         const needCache = !item.meta?.ignoreKeepAlive;
         if (!needCache) {
-          return;
+          continue;
         }
         const name = item.name as string;
         cacheMap.add(name);
@@ -136,10 +136,10 @@ export const useMultipleTabStore = defineStore({
         curTab.query = query || curTab.query;
         curTab.fullPath = fullPath || curTab.fullPath;
         this.tabList.splice(updateIndex, 1, curTab);
-        return;
+      } else {
+        // Add tab
+        this.tabList.push(route);
       }
-      // Add tab
-      this.tabList.push(route);
       this.updateCacheTab();
       cacheTab && Persistent.setLocal(MULTIPLE_TABS_KEY, this.tabList);
     },
@@ -285,6 +285,17 @@ export const useMultipleTabStore = defineStore({
      */
     async bulkCloseTabs(pathList: string[]) {
       this.tabList = this.tabList.filter((item) => !pathList.includes(item.fullPath));
+    },
+
+    /**
+     * Set tab's title
+     */
+    async setTabTitle(title: string, route: RouteLocationNormalized) {
+      const findTab = this.getTabList.find((item) => item === route);
+      if (findTab) {
+        findTab.meta.title = title;
+        await this.updateCacheTab();
+      }
     },
   },
 });

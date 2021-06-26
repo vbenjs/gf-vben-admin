@@ -4,7 +4,6 @@
       submitOnReset
       v-bind="getFormProps"
       v-if="getBindValues.useSearchForm"
-      :submitButtonOptions="{ loading: getLoading }"
       :tableAction="tableAction"
       @register="registerForm"
       @submit="handleSearchInfoChange"
@@ -33,13 +32,19 @@
   </div>
 </template>
 <script lang="ts">
-  import type { BasicTableProps, TableActionType, SizeType } from './types/table';
+  import type {
+    BasicTableProps,
+    TableActionType,
+    SizeType,
+    ColumnChangeParam,
+  } from './types/table';
 
   import { defineComponent, ref, computed, unref, toRaw } from 'vue';
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import expandIcon from './components/ExpandIcon';
   import HeaderCell from './components/HeaderCell.vue';
+  import { InnerHandlers } from './types/table';
 
   import { usePagination } from './hooks/usePagination';
   import { useColumns } from './hooks/useColumns';
@@ -54,11 +59,11 @@
   import { createTableContext } from './hooks/useTableContext';
   import { useTableFooter } from './hooks/useTableFooter';
   import { useTableForm } from './hooks/useTableForm';
-  import { useExpose } from '/@/hooks/core/useExpose';
   import { useDesign } from '/@/hooks/web/useDesign';
 
   import { omit } from 'lodash-es';
   import { basicProps } from './props';
+  import { isFunction } from '/@/utils/is';
 
   export default defineComponent({
     components: {
@@ -82,8 +87,10 @@
       'edit-row-end',
       'edit-change',
       'expanded-rows-change',
+      'change',
+      'columns-change',
     ],
-    setup(props, { attrs, emit, slots }) {
+    setup(props, { attrs, emit, slots, expose }) {
       const tableElRef = ref<ComponentRef>(null);
       const tableData = ref<Recordable[]>([]);
 
@@ -117,10 +124,11 @@
       } = useRowSelection(getProps, tableData, emit);
 
       const {
-        handleTableChange,
+        handleTableChange: onTableChange,
         getDataSourceRef,
         getDataSource,
         setTableData,
+        updateTableDataRecord,
         fetch,
         getRowKey,
         reload,
@@ -138,6 +146,14 @@
         },
         emit
       );
+
+      function handleTableChange(...args) {
+        onTableChange.call(undefined, ...args);
+        emit('change', ...args);
+        // 解决通过useTable注册onChange时不起作用的问题
+        const { onChange } = unref(getProps);
+        onChange && isFunction(onChange) && onChange.call(undefined, ...args);
+      }
 
       const {
         getViewColumns,
@@ -168,7 +184,15 @@
 
       const { getExpandOption, expandAll, collapseAll } = useTableExpand(getProps, tableData, emit);
 
-      const { getHeaderProps } = useTableHeader(getProps, slots);
+      const handlers: InnerHandlers = {
+        onColumnsChange: (data: ColumnChangeParam[]) => {
+          emit('columns-change', data);
+          // support useTable
+          unref(getProps).onColumnsChange?.(data);
+        },
+      };
+
+      const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
 
       const { getFooterProps } = useTableFooter(
         getProps,
@@ -177,12 +201,8 @@
         getDataSourceRef
       );
 
-      const {
-        getFormProps,
-        replaceFormSlotKey,
-        getFormSlotKeys,
-        handleSearchInfoChange,
-      } = useTableForm(getProps, slots, fetch);
+      const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } =
+        useTableForm(getProps, slots, fetch, getLoading);
 
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
@@ -209,7 +229,7 @@
           propsData = omit(propsData, 'scroll');
         }
 
-        propsData = omit(propsData, 'class');
+        propsData = omit(propsData, ['class', 'onChange']);
         return propsData;
       });
 
@@ -245,6 +265,7 @@
         deleteSelectRowByKey,
         setPagination,
         setTableData,
+        updateTableDataRecord,
         redoHeight,
         setSelectedRowKeys,
         setColumns,
@@ -268,7 +289,7 @@
       };
       createTableContext({ ...tableAction, wrapRef, getBindValues });
 
-      useExpose<TableActionType>(tableAction);
+      expose(tableAction);
 
       emit('register', tableAction, formActions);
 
@@ -299,9 +320,11 @@
   @prefix-cls: ~'@{namespace}-basic-table';
 
   .@{prefix-cls} {
+    max-width: 100%;
+
     &-row__striped {
       td {
-        background-color: content-background;
+        background-color: @app-content-background;
       }
     }
 
@@ -312,7 +335,7 @@
         padding: 12px 10px 6px 10px;
         margin-bottom: 16px;
         background-color: @component-background;
-        border-radius: 4px;
+        border-radius: 2px;
       }
     }
 
@@ -332,6 +355,7 @@
       border-radius: 2px;
 
       .ant-table-title {
+        min-height: 40px;
         padding: 0 0 8px 0 !important;
       }
 

@@ -1,3 +1,114 @@
+## 2.5.0(2021-06-20)
+
+## (Breaking changes) Breaking changes
+
+- Change the project `windicss` to `tailwindcss` to solve the memory overflow problem
+  - There are currently incompatible areas of the project
+    - The wording of `!xl:m-4` needs to be changed to `xl:!m-4`, note that only `!` is incompatible. If you don’t use it, you don’t need to change it.
+    - The new features of `windicss` itself need to be adjusted, for example, `Attribute` mode is not compatible
+
+### ✨ Refactor
+
+- Remove `useExpose` and use `expose` provided by the component itself instead
+
+### ⚡ Performance Improvements
+
+- **Locale** merge multi-language files to reduce the number of files
+- **Utils** Mitt default export is changed from `Class` to `Function`
+- **Axios** `isTransformRequestResult` is renamed to `isTransformResponse`
+
+### ✨ Features
+
+- **CropperImage** `Cropper` Avatar cropping adds circular cropping function
+- **CropperAvatar** Added avatar upload component
+- **Drawer** `useDrawer` added `closeDrawer` function
+- **Preview** Added `createImgPreview` picture preview function
+- **Setup** New guide page example
+- **Tests** Add jest test suite, Vue component single test is not currently supported
+- **Axios** Added `authenticationScheme` configuration to specify the authentication scheme
+- **Setting** Added `sessionTimeoutProcessing` project configuration item, used to configure how to deal with session timeout
+
+### 🐛 Bug Fixes
+
+- **Modal** fix full screen height calculation error
+- **Modal** Fix the problem that the shutdown event is triggered multiple times
+- **PageWrapper** fix the height calculation problem
+- **FlowChart** Repair drag and drop menu missing
+- Fixed Iframe routing error in background mode
+- **PageWrapper** Fix the height calculation problem when footer and global footer are opened at the same time
+- **Menu** Fix the jitter problem of menu folding animation
+- **Store** fixed type error after pinia version upgrade
+
+## 2.4.2(2021-06-10)
+
+### ✨ Refactor
+
+- `CountTo` component refactoring
+
+### ✨ Features
+
+- `radioButtonGroup` supports `boolean` value
+- `useModalInner` added `redoModalHeight` to reset the height of `Modal` inside Modal
+- `useECharts` added `getInstance` to obtain instances of `echart`
+- `TableAction` added `stopButtonPropagation` to prevent the action button click event from bubbling
+- `BasicTable` in the row edit mode, you can get or set the value of other editing components in the column
+- The `ApiSelect` component will automatically re-fetch the data after the `params` is changed
+- `TableImg` component improvement
+- `BasicTable` added `columns-change` event to monitor the user to change the sorting, display, and fixed status of columns
+- `Tinymce` supports dynamic modification readonly
+- `BasicTable` added `updateTableDataRecord` method to update the specified row data
+- `useModal` added `closeModal` method to close `Modal`
+
+### 🐛 Bug Fixes
+
+- Fix the problem that `redoModalHeight` cannot reduce the height
+- Fix the problem that the schema data of `BasicForm` does not take effect
+- Fix the problem that multiple tags may cause `KeepAlive` to fail
+- Fix the problem that the default `axios` interceptor cannot handle custom code
+- Fix the height issue of the lock screen pop-up window
+- Fixed the problem that the half-selected state of the `Column Display` checkbox of `BaiscTable` was incorrectly displayed
+- Fixed the problem that the preview list of the `BasicUpload` component could not be displayed in some cases
+- Fix the problem that the `options` setting of ` RadioButtonGroup``disabled ` does not take effect
+- Fix the problem that the button for uploading pictures in the read-only mode of the `Tinymce` component is still available
+- Fix the stuttering problem of `BasicForm` under certain circumstances
+- Fix the problem that "directory" routing does not work
+
+## 2.4.1(2021-06-01)
+
+### ✨ Features
+
+- Add `DatePicker` and `TimePicker` components to editable tables
+- Added `defaultExpandLevel` configuration to `Tree` component
+
+### ⚡ Performance Improvements
+
+-Menu search default focus
+
+### 🐛 Bug Fixes
+
+- Fix known issues of `CodeEditor`
+- Fix the issue of `i18n` console warning
+- Fix the problem that the editable table `align` configuration does not take effect
+- Ensure that `axios` only processes `Object` parameters
+- Fix the failure of the `defaultExpandAll` configuration of the `Tree` component
+- Fix the problem of missing dividing line in `TableAction`
+- Fix the known issues of the table
+- Fix that the lang attribute of HTML will not be set when reloading due to the first loading or changing the language
+
+## 2.4.0 (2021-05-25)
+
+### ✨ Features
+
+-New graphical editor example -New code editor (including Json editor) -Added `JsonPreview`Json data viewing component -The fields of the data column and actionColumn of the table can be controlled according to the authority and business. -Added an example of a permission control table (AuthColumn.vue) -Added user login expiration example
+
+### ⚡ Performance Improvements
+
+-Consolidate some language files to reduce the number of files
+
+### 🐛 Bug Fixes
+
+-Fix the flashing white screen when the dark theme refreshes -Fix the problem that other functions are invalid when the tab is closed -Fix known issues in the form -Fix the automatic lock screen failure
+
 ## 2.3.0 (2021-04-10)
 
 ## (Breaking changes) Breaking changes

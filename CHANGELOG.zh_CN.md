@@ -1,10 +1,120 @@
 ## Wip
 
+### 🐛 Bug Fixes
+
+- **Table** 修复分页抖动问题
+- **Upload** 确保携带自定义参数
+- **Dropdown** 修复 popConfirm 的图标显示问题
+- **Table** 修复树形表格的编辑事件不正常的问题
+- **Table** 修复当表格数据为空时，getDataSource 返回的值不是表格所使用的数据源的问题
+
+## 2.5.0(2021-06-20)
+
+## (破坏性更新) Breaking changes
+
+- 将项目`windicss`改为`tailwindcss`，解决内存溢出问题
+  - 目前项目不兼容地方有
+    - `!xl:m-4` 之类的写法需要改为`xl:!m-4`,注意只有`!`这个不兼容，没用到则不用改
+    - `windicss`自身新增的特性需要调整，比如`Attribute`模式不兼容
+
+### ✨ Refactor
+
+- 移除`useExpose`,使用组件自身提供的`expose`代替
+
+### ⚡ Performance Improvements
+
+- **Locale** 合并多语言文件，减少文件数量
+- **Utils** Mitt 默认导出由 `Class` 改为 `Function`
+- **Axios** `isTransformRequestResult`更名为`isTransformResponse`
+
+### ✨ Features
+
+- **CropperImage** `Cropper` 头像裁剪新增圆形裁剪功能
+- **CropperAvatar** 新增头像上传组件
+- **Drawer** `useDrawer`新增`closeDrawer`函数
+- **Preview** 新增`createImgPreview`图片预览函数
+- **Setup** 新增引导页示例
+- **Tests** 添加 jest 测试套件，暂不支持 Vue 组件单测
+- **Axios** 新增`authenticationScheme`配置，用于指定认证方案
+- **Setting** 新增 `sessionTimeoutProcessing` 项目配置项，用于配置会话超时如何处理
+
+### 🐛 Bug Fixes
+
+- **Modal** 修复全屏高度计算错误
+- **Modal** 修复关闭事件触发多次问题
+- **PageWrapper** 修复高度计算问题
+- **FlowChart** 修复拖放菜单丢失
+- 修复后台模式下，Iframe 路由错误
+- **PageWrapper** 修复 footer 与全局页脚同时开启时的高度计算问题
+- **Menu** 修复菜单折叠动画抖动问题
+- **Store**修复 pinia 版本升级之后类型错误
+
+## 2.4.2(2021-06-10)
+
+### ✨ Refactor
+
+- `CountTo`组件重构
+
+### ✨ Features
+
+- `radioButtonGroup` 支持`boolean`值
+- `useModalInner` 新增 `redoModalHeight`用于在 Modal 内部重设`Modal`高度
+- `useECharts` 新增`getInstance`用于获取`echart`实例
+- `TableAction` 新增 `stopButtonPropagation` 阻止操作按钮点击事件冒泡
+- `BasicTable` 在行编辑模式下，可以获取或设置其它处于列的编辑组件的值
+- `ApiSelect` 组件在`params`改变后会自动重新`fetch`数据
+- `TableImg` 组件改进
+- `BasicTable` 新增 `columns-change` 事件用于监听用户改变列排序、展示、固定状态
+- `Tinymce`支持动态修改 readonly
+- `BasicTable`新增`updateTableDataRecord`方法用于更新指定行数据
+- `useModal`新增`closeModal`方法用于关闭`Modal`
+
+### 🐛 Bug Fixes
+
+- 修复`redoModalHeight`不能减小高度的问题
+- 修复 `BasicForm`设置 schemas 数据不生效的问题
+- 修复多标签可能导致`KeepAlive`失效的问题
+- 修复默认的`axios`拦截器不能处理自定义 code 的问题
+- 修复锁屏弹窗的高度问题
+- 修复`BaiscTable`的`列展示`复选框的半选状态显示不正确的问题
+- 修复`BasicUpload`组件的预览列表某些情况下不能显示的问题
+- 修复`RadioButtonGroup`的`options`设置`disabled`不生效的问题
+- 修复`Tinymce`组件在只读模式下上传图片的按钮仍然可用的问题
+- 修复`BasicForm`特定情况下的卡顿问题
+- 修复"目录"路由不起作用的问题
+
+## 2.4.1(2021-06-01)
+
+### ✨ Features
+
+- 可编辑表格新增`DatePicker`和`TimePicker`组件
+- `Tree` 组件新增`defaultExpandLevel`配置
+
+### ⚡ Performance Improvements
+
+- 菜单搜索默认聚焦
+
+### 🐛 Bug Fixes
+
+- 修复`CodeEditor`已知问题
+- 修复`i18n`控制台警告问题
+- 修复可编辑表格`align`配置不生效问题
+- 确保`axios`只对`Object`参数进行处理
+- 修复`Tree`组件 `defaultExpandAll` 配置失效
+- 修复`TableAction` 分割线丢失问题
+- 修复表格已知问题
+- 修复首次加载或改变语言导致重载时，不会设置 HTML 的 lang 属性
+
+## 2.4.0 (2021-05-25)
+
 ### ✨ Features
 
 - 新增图形编辑器示例
 - 新增代码编辑器(包含 Json 编辑器)
 - 新增 `JsonPreview`Json 数据查看组件
+- 表格的数据列(column)和操作列(actionColumn)的字段可以根据权限和业务来控制是否显示
+- 新增权限控制表格示例(AuthColumn.vue)
+- 新增用户登录过期示例
 
 ### ⚡ Performance Improvements
 
@@ -15,6 +125,7 @@
 - 修复黑暗主题刷新闪烁的白屏
 - 修复标签页关闭其他功能失效问题
 - 修复表单已知问题
+- 修复自动锁屏失效
 
 ## 2.3.0 (2021-04-10)
 

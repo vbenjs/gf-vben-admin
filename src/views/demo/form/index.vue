@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="表单基础示例">
+  <PageWrapper title="表单基础示例" contentFullHeight>
     <CollapseContainer title="基础示例">
       <BasicForm
         autoFocusFirstItem
@@ -19,6 +19,58 @@
   import { PageWrapper } from '/@/components/Page';
 
   import { optionsListApi } from '/@/api/demo/select';
+
+  const provincesOptions = [
+    {
+      id: 'guangdong',
+      label: '广东省',
+      value: '1',
+      key: '1',
+    },
+    {
+      id: 'jiangsu',
+      label: '江苏省',
+      value: '2',
+      key: '2',
+    },
+  ];
+  const citiesOptionsData = {
+    guangdong: [
+      {
+        label: '珠海市',
+        value: '1',
+        key: '1',
+      },
+      {
+        label: '深圳市',
+        value: '2',
+        key: '2',
+      },
+      {
+        label: '广州市',
+        value: '3',
+        key: '3',
+      },
+    ],
+    jiangsu: [
+      {
+        label: '南京市',
+        value: '1',
+        key: '1',
+      },
+      {
+        label: '无锡市',
+        value: '2',
+        key: '2',
+      },
+      {
+        label: '苏州市',
+        value: '3',
+        key: '3',
+      },
+    ],
+  };
+
   const schemas: FormSchema[] = [
     {
       field: 'field1',
@@ -220,11 +272,39 @@
       label: '远程下拉',
       required: true,
       componentProps: {
+        // more details see /src/components/Form/src/components/ApiSelect.vue
         api: optionsListApi,
+        params: {
+          id: 1,
+        },
+        // use [res.data.result.list] (no res.data.result) as options datas
+        // result: {
+        //   list: [
+        //     {
+        //       name: "选项0",
+        //       id: "0"
+        //     },
+        //   ]
+        // }
+        resultField: 'list',
+        // use name as label
+        labelField: 'name',
+        // use id as value
+        valueField: 'id',
+        // not request untill to select
+        immediate: false,
+        onChange: (e) => {
+          console.log('selected:', e);
+        },
+        // atfer request callback
+        onOptionsChange: (options) => {
+          console.log('get options', options.length, options);
+        },
       },
       colProps: {
         span: 8,
       },
+      // set default value
       defaultValue: '0',
     },
     {
@@ -234,6 +314,81 @@
       required: true,
       colProps: {
         span: 8,
+      },
+    },
+    {
+      field: 'province',
+      component: 'Select',
+      label: '省份',
+      colProps: {
+        span: 8,
+      },
+      componentProps: ({ formModel, formActionType }) => {
+        return {
+          options: provincesOptions,
+          placeholder: '省份与城市联动',
+          onChange: (e: any) => {
+            // console.log(e)
+            let citiesOptions =
+              e == 1
+                ? citiesOptionsData[provincesOptions[0].id]
+                : citiesOptionsData[provincesOptions[1].id];
+            // console.log(citiesOptions)
+            if (e === undefined) {
+              citiesOptions = [];
+            }
+            formModel.city = undefined; //  reset city value
+            const { updateSchema } = formActionType;
+            updateSchema({
+              field: 'city',
+              componentProps: {
+                options: citiesOptions,
+              },
+            });
+          },
+        };
+      },
+    },
+    {
+      field: 'city',
+      component: 'Select',
+      label: '城市',
+      colProps: {
+        span: 8,
+      },
+      componentProps: {
+        options: [], // defalut []
+        placeholder: '省份与城市联动',
+      },
+    },
+    {
+      field: 'field21',
+      component: 'Slider',
+      label: '字段21',
+      componentProps: {
+        min: 0,
+        max: 100,
+        range: true,
+        marks: {
+          20: '20°C',
+          60: '60°C',
+        },
+      },
+      colProps: {
+        span: 8,
+      },
+    },
+    {
+      field: 'field22',
+      component: 'Rate',
+      label: '字段22',
+      defaultValue: 3,
+      colProps: {
+        span: 8,
+      },
+      componentProps: {
+        disabled: false,
+        allowHalf: true,
       },
     },
   ];

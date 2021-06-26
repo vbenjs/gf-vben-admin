@@ -39,6 +39,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     root,
     resolve: {
       alias: [
+        {
+          find: 'vue-i18n',
+          replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
+        },
         // /@/xxxx => src/xxxx
         {
           find: /\/@\//,
@@ -53,6 +57,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       ],
     },
     server: {
+      // Listening on all local IPs
+      host: true,
       port: VITE_PORT,
       // Load proxy configuration from .env
       proxy: createProxy(VITE_PROXY),
@@ -69,15 +75,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       },
       // Turning off brotliSize display can slightly reduce packaging time
       brotliSize: false,
-      chunkSizeWarningLimit: 1500,
+      chunkSizeWarningLimit: 2000,
     },
     define: {
       // setting vue-i18-next
       // Suppress warning
-      __VUE_I18N_LEGACY_API__: false,
-      __VUE_I18N_FULL_INSTALL__: false,
       __INTLIFY_PROD_DEVTOOLS__: false,
-
       __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
     css: {
