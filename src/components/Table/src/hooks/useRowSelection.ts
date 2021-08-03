@@ -1,8 +1,9 @@
 import { isFunction } from '/@/utils/is';
 import type { BasicTableProps, TableRowSelection } from '../types/table';
-import { computed, ref, unref, ComputedRef, Ref, toRaw, watch } from 'vue';
+import { computed, ComputedRef, nextTick, Ref, ref, toRaw, unref, watch } from 'vue';
 import { ROW_KEY } from '../const';
 import { omit } from 'lodash-es';
+import { findNodeAll } from '/@/utils/helper/treeHelper';
 
 export function useRowSelection(
   propsRef: ComputedRef<BasicTableProps>,
@@ -21,24 +22,36 @@ export function useRowSelection(
     return {
       selectedRowKeys: unref(selectedRowKeysRef),
       hideDefaultSelections: false,
-      onChange: (selectedRowKeys: string[], selectedRows: Recordable[]) => {
-        selectedRowKeysRef.value = selectedRowKeys;
-        selectedRowRef.value = selectedRows;
-        const { onChange } = rowSelection;
-        if (onChange && isFunction(onChange)) onChange(selectedRowKeys, selectedRows);
-        emit('selection-change', {
-          keys: selectedRowKeys,
-          rows: selectedRows,
-        });
+      onChange: (selectedRowKeys: string[]) => {
+        setSelectedRowKeys(selectedRowKeys);
+        // selectedRowKeysRef.value = selectedRowKeys;
+        // selectedRowRef.value = selectedRows;
       },
-      ...omit(rowSelection === undefined ? {} : rowSelection, ['onChange']),
+      ...omit(rowSelection, ['onChange']),
     };
   });
 
   watch(
     () => unref(propsRef).rowSelection?.selectedRowKeys,
     (v: string[]) => {
-      selectedRowKeysRef.value = v;
+      setSelectedRowKeys(v);
+    }
+  );
+
+  watch(
+    () => unref(selectedRowKeysRef),
+    () => {
+      nextTick(() => {
+        const { rowSelection } = unref(propsRef);
+        if (rowSelection) {
+          const { onChange } = rowSelection;
+          if (onChange && isFunction(onChange)) onChange(getSelectRowKeys(), getSelectRows());
+        }
+        emit('selection-change', {
+          keys: getSelectRowKeys(),
+          rows: getSelectRows(),
+        });
+      });
     }
   );
 
@@ -53,11 +66,13 @@ export function useRowSelection(
 
   function setSelectedRowKeys(rowKeys: string[]) {
     selectedRowKeysRef.value = rowKeys;
-
-    const rows = toRaw(unref(tableData)).filter((item) =>
-      rowKeys.includes(item[unref(getRowKey) as string])
+    selectedRowRef.value = findNodeAll(
+      toRaw(unref(tableData)),
+      (item) => rowKeys.includes(item[unref(getRowKey) as string]),
+      {
+        children: propsRef.value.childrenColumnName ?? 'children',
+      }
     );
-    selectedRowRef.value = rows;
   }
 
   function setSelectedRows(rows: Recordable[]) {
