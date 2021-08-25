@@ -119,7 +119,7 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
+    account: 'admin',
     password: '123456',
   });
 
@@ -129,36 +129,33 @@
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
-      async function handleLogin() {
-        const data = await validForm();
-        if (!data) return;
-        try {
-          loading.value = true;
-          const userInfo = await userStore.login(
-            toRaw({
-              password: data.password,
-              username: data.account,
-              mode: 'none', //不要默认的错误提示
-            })
-          );
-          if (userInfo) {
-            notification.success({
-              message: t('sys.login.loginSuccessTitle'),
-              description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.username}`,
-              duration: 3,
-            });
-          }
-        } catch (error) {
-          createErrorModal({
-            title: t('sys.api.errorTip'),
-            content: error.message || t('sys.api.networkExceptionMsg'),
-            getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-          });
-        } finally {
-          loading.value = false;
-        }
+  async function handleLogin() {
+    const data = await validForm();
+    if (!data) return;
+    try {
+      loading.value = true;
+      const userInfo = await userStore.login(
+        toRaw({
+          password: data.password,
+          username: data.account,
+          mode: 'none', //不要默认的错误提示
+        }),
+      );
+      if (userInfo) {
+        notification.success({
+          message: t('sys.login.loginSuccessTitle'),
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.username}`,
+          duration: 3,
+        });
       }
-
-
-
+    } catch (error) {
+      createErrorModal({
+        title: t('sys.api.errorTip'),
+        content: error.message || t('sys.api.networkExceptionMsg'),
+        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+      });
+    } finally {
+      loading.value = false;
+    }
+  }
 </script>

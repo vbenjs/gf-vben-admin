@@ -66,6 +66,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
       };
     },
   });
+
   joinParentPath(list);
   return cloneDeep(list);
 }

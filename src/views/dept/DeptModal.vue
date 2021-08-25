@@ -1,6 +1,5 @@
 <template>
   <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit">
-    {{ formRef }}
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -17,11 +16,9 @@
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
-      const formRef = ref();
       const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
         labelWidth: 100,
         schemas: formSchema,
-        model: formRef,
         showActionButtonGroup: false,
       });
 
@@ -35,29 +32,29 @@
             ...data.record,
           });
         }
-        const treeData = await getDeptList();
-        updateSchema({
-          field: 'parentDept',
-          componentProps: { treeData },
-        });
+        // const treeData = await getDeptList();
+        // updateSchema({
+        //   field: 'parentDept',
+        //   componentProps: { treeData },
+        // });
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增部门' : '编辑部门'));
 
       async function handleSubmit() {
-        try {
-          const values = await validate();
-          setModalProps({ confirmLoading: true });
-          // TODO custom api
-          console.log(values);
-          closeModal();
-          emit('success');
-        } finally {
-          setModalProps({ confirmLoading: false });
-        }
+        // try {
+        //   const values = await validate();
+        //   setModalProps({ confirmLoading: true });
+        //   // TODO custom api
+        //   console.log(values);
+        //   closeModal();
+        //   emit('success');
+        // } finally {
+        //   setModalProps({ confirmLoading: false });
+        // }
       }
 
-      return { registerModal, registerForm, getTitle, handleSubmit, formRef };
+      return { registerModal, registerForm, getTitle, handleSubmit };
     },
   });
 </script>

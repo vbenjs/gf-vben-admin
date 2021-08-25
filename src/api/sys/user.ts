@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams,  GetUserInfoModel } from './model/userModel';
+import { LoginParams, GetUserInfoModel } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 
@@ -7,7 +7,7 @@ enum Api {
   Login = '/login',
   Logout = '/logout',
   GetPermCode = '/getPermCode',
-  GetUserInfo = '/api/user/info',
+  GetUserInfo = '/user/info',
   GetPermCodeByUserId = '/getPermCodeByUserId',
 }
 
@@ -22,6 +22,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
     {
       errorMessageMode: mode,
+      apiUrl: 'http://localhost:10088',
     },
   );
 }

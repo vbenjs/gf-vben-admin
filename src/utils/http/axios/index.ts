@@ -55,12 +55,13 @@ const transform: AxiosTransform = {
         notification.success({ message });
       }
       return result;
-    }else {
-      if (options.errorMessageMode === 'modal') {
-        createErrorModal({ title: t('sys.api.errorTip'), content: message });
-      } else if (options.errorMessageMode === 'message') {
-        createMessage.error(message);
-      }
+    } else {
+      checkStatus(code, message, options.errorMessageMode);
+      // if (options.errorMessageMode === 'modal') {
+      //   createErrorModal({ title: t('sys.api.errorTip'), content: message });
+      // } else if (options.errorMessageMode === 'message') {
+      //   createMessage.error(message);
+      // }
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
@@ -79,14 +80,12 @@ const transform: AxiosTransform = {
     // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
 
-
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    throw new Error(message || t('sys.api.apiRequestFailed'));
   },
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
-
     if (joinPrefix) {
       config.url = `${urlPrefix}${config.url}`;
     }
@@ -160,6 +159,7 @@ const transform: AxiosTransform = {
   responseInterceptorsCatch: (error: any) => {
     const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
+
     errorLogStore.addAjaxErrorInfo(error);
     const { response, code, message, config } = error || {};
     const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none';
