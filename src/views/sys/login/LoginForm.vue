@@ -81,8 +81,8 @@
     </div>
   </Form>
 </template>
-<script lang="ts">
-  import { defineComponent, reactive, ref, toRaw, unref, computed } from 'vue';
+<script lang="ts" setup>
+  import { reactive, ref, toRaw, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
   import {
@@ -102,48 +102,32 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   //import { onKeyStroke } from '@vueuse/core';
 
-  export default defineComponent({
-    name: 'LoginForm',
-    components: {
-      [Col.name]: Col,
-      [Row.name]: Row,
-      Checkbox,
-      Button,
-      Form,
-      FormItem: Form.Item,
-      Input,
-      Divider,
-      LoginFormTitle,
-      InputPassword: Input.Password,
-      GithubFilled,
-      WechatFilled,
-      AlipayCircleFilled,
-      GoogleCircleFilled,
-      TwitterCircleFilled,
-    },
-    setup() {
-      const { t } = useI18n();
-      const { notification, createErrorModal } = useMessage();
-      const { prefixCls } = useDesign('login');
-      const userStore = useUserStore();
+  const ACol = Col;
+  const ARow = Row;
+  const FormItem = Form.Item;
+  const InputPassword = Input.Password;
+  const { t } = useI18n();
+  const { notification, createErrorModal } = useMessage();
+  const { prefixCls } = useDesign('login');
+  const userStore = useUserStore();
 
-      const { setLoginState, getLoginState } = useLoginState();
-      const { getFormRules } = useFormRules();
+  const { setLoginState, getLoginState } = useLoginState();
+  const { getFormRules } = useFormRules();
 
-      const formRef = ref();
-      const loading = ref(false);
-      const rememberMe = ref(false);
+  const formRef = ref();
+  const loading = ref(false);
+  const rememberMe = ref(false);
 
-      const formData = reactive({
-        account: 'vben',
-        password: '123456',
-      });
+  const formData = reactive({
+    account: 'vben',
+    password: '123456',
+  });
 
-      const { validForm } = useFormValid(formRef);
+  const { validForm } = useFormValid(formRef);
 
-      //onKeyStroke('Enter', handleLogin);
+  //onKeyStroke('Enter', handleLogin);
 
-      const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
+  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
       async function handleLogin() {
         const data = await validForm();
@@ -175,19 +159,6 @@
         }
       }
 
-      return {
-        t,
-        prefixCls,
-        formRef,
-        formData,
-        getFormRules,
-        rememberMe,
-        handleLogin,
-        loading,
-        setLoginState,
-        LoginStateEnum,
-        getShow,
-      };
-    },
-  });
+
+
 </script>

@@ -20,6 +20,7 @@ interface UserState {
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
+  lastUpdateTime: number;
 }
 
 export const useUserStore = defineStore({
@@ -33,6 +34,8 @@ export const useUserStore = defineStore({
     roleList: [],
     // Whether the login expired
     sessionTimeout: false,
+    // Last fetch time
+    lastUpdateTime: 0,
   }),
   getters: {
     getUserInfo(): UserInfo {
@@ -47,6 +50,9 @@ export const useUserStore = defineStore({
     getSessionTimeout(): boolean {
       return !!this.sessionTimeout;
     },
+    getLastUpdateTime(): number {
+      return this.lastUpdateTime;
+    },
   },
   actions: {
     setToken(info: string | undefined) {
@@ -59,6 +65,7 @@ export const useUserStore = defineStore({
     },
     setUserInfo(info: UserInfo) {
       this.userInfo = info;
+      this.lastUpdateTime = new Date().getTime();
       setAuthCache(USER_INFO_KEY, info);
     },
     setSessionTimeout(flag: boolean) {
@@ -77,7 +84,7 @@ export const useUserStore = defineStore({
       params: LoginParams & {
         goHome?: boolean;
         mode?: ErrorMessageMode;
-      }
+      },
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
@@ -120,10 +127,12 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      try {
-        await doLogout();
-      } catch {
-        console.log('注销Token失败');
+      if (this.token) {
+        try {
+          await doLogout();
+        } catch {
+          console.log('注销Token失败');
+        }
       }
       this.setToken(undefined);
       this.setSessionTimeout(false);

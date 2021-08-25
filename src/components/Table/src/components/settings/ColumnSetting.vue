@@ -282,7 +282,7 @@
         nextTick(() => {
           const columnListEl = unref(columnListRef);
           if (!columnListEl) return;
-          const el = columnListEl.$el;
+          const el = columnListEl.$el as any;
           if (!el) return;
           // Drag and drop sort
           const { initSortable } = useSortable(el, {
@@ -351,7 +351,7 @@
           const visible =
             columns.findIndex(
               (c: BasicColumn | string) =>
-                c === col.value || (typeof c !== 'string' && c.dataIndex === col.value)
+                c === col.value || (typeof c !== 'string' && c.dataIndex === col.value),
             ) !== -1;
           return { dataIndex: col.value, fixed: col.fixed, visible };
         });

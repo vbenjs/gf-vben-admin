@@ -99,6 +99,7 @@ export interface TableActionType {
   getColumns: (opt?: GetColumnsParams) => BasicColumn[];
   setColumns: (columns: BasicColumn[] | string[]) => void;
   getDataSource: <T = Recordable>() => T[];
+  getRawDataSource: <T = Recordable>() => T;
   setLoading: (loading: boolean) => void;
   setProps: (props: Partial<BasicTableProps>) => void;
   redoHeight: () => void;
@@ -360,6 +361,18 @@ export interface BasicTableProps<T = any> {
    * @version 1.5.4
    */
   transformCellText?: Function;
+
+  /**
+   * Callback executed before editable cell submit value, not for row-editor
+   *
+   * The cell will not submit data while callback return false
+   */
+  beforeEditSubmit?: (data: {
+    record: Recordable;
+    index: number;
+    key: string | number;
+    value: any;
+  }) => Promise<any>;
 
   /**
    * Callback executed when pagination, filters or sorter is changed
