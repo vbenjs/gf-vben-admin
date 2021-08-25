@@ -78,6 +78,8 @@ const transform: AxiosTransform = {
 
 
 
+    throw new Error(message || t('sys.api.apiRequestFailed'));
+  },
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
