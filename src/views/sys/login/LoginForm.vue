@@ -1,8 +1,20 @@
 <template>
   <LoginFormTitle v-show="getShow" class="enter-x" />
-  <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef" v-show="getShow">
+  <Form
+    class="p-4 enter-x"
+    :model="formData"
+    :rules="getFormRules"
+    ref="formRef"
+    v-show="getShow"
+    @keypress.enter="handleLogin"
+  >
     <FormItem name="account" class="enter-x">
-      <Input size="large" v-model:value="formData.account" :placeholder="t('sys.login.userName')" />
+      <Input
+        size="large"
+        v-model:value="formData.account"
+        :placeholder="t('sys.login.userName')"
+        class="fix-auto-fill"
+      />
     </FormItem>
     <FormItem name="password" class="enter-x">
       <InputPassword
@@ -107,7 +119,7 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
+    account: 'admin',
     password: '123456',
   });
 

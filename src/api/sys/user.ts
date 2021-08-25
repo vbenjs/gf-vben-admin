@@ -1,9 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import {
-  LoginParams,
-  GetUserInfoByUserIdParams,
-  GetUserInfoByUserIdModel,
-} from './model/userModel';
+import { LoginParams, GetUserInfoModel } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 
@@ -25,6 +21,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
     {
       errorMessageMode: mode,
+      apiUrl: 'http://localhost:10088',
     },
   );
 }
