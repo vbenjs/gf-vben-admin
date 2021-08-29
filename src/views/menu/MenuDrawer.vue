@@ -10,61 +10,66 @@
     <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>
-<script lang="ts">
-  import { defineComponent, ref, computed, unref } from 'vue';
+<script lang="ts" setup>
+  import { ref, computed, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './menu.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
+  import { Curd } from '/@/api/Curd';
 
-  import { getMenuList } from '/@/api/demo/system';
+  const emit = defineEmits(['success', 'register']);
+  const isUpdate = ref(true);
+  const id = ref(0);
+  const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
+    labelWidth: 100,
+    schemas: formSchema,
+    showActionButtonGroup: false,
+    baseColProps: { lg: 12, md: 24 },
+  });
 
-  export default defineComponent({
-    name: 'MenuDrawer',
-    components: { BasicDrawer, BasicForm },
-    emits: ['success', 'register'],
-    setup(_, { emit }) {
-      const isUpdate = ref(true);
+  const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+    resetFields();
+    setDrawerProps({ confirmLoading: false });
+    isUpdate.value = !!data?.isUpdate;
+    const { record } = data;
 
-      const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
-        labelWidth: 100,
-        schemas: formSchema,
-        showActionButtonGroup: false,
-        baseColProps: { lg: 12, md: 24 },
+    console.log(record);
+    if (unref(isUpdate)) {
+      id.value = record.id;
+      setFieldsValue({
+        ...record,
+        title: record.meta.title,
       });
+    }
 
-      const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-        resetFields();
-        setDrawerProps({ confirmLoading: false });
-        isUpdate.value = !!data?.isUpdate;
+    let treeData = [{ name: '无父级', value: 0, id: 0 }];
+    const res = await Curd({ i: 'router', a: 'list' });
+    treeData = treeData.concat(res.items);
+    // console.log(treeData);
+    updateSchema({
+      field: 'parent',
+      componentProps: { treeData },
+    });
+  });
 
-        if (unref(isUpdate)) {
-          setFieldsValue({
-            ...data.record,
-          });
-        }
-        const treeData = await getMenuList();
-        updateSchema({
-          field: 'parentMenu',
-          componentProps: { treeData },
-        });
-      });
+  const getTitle = computed(() => (!unref(isUpdate) ? '新增菜单' : '编辑菜单'));
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增菜单' : '编辑菜单'));
-
-      async function handleSubmit() {
-        try {
-          const values = await validate();
-          setDrawerProps({ confirmLoading: true });
-          // TODO custom api
-          console.log(values);
-          closeDrawer();
-          emit('success');
-        } finally {
-          setDrawerProps({ confirmLoading: false });
-        }
+  async function handleSubmit() {
+    try {
+      const values = await validate();
+      setDrawerProps({ confirmLoading: true });
+      // TODO custom api
+      console.log(values);
+      if (unref(isUpdate)) {
+        await Curd({ i: 'router', a: 'edit', id: id.value, ...values });
+      } else {
+        await Curd({ i: 'router', a: 'add', ...values });
       }
 
-      return { registerDrawer, registerForm, getTitle, handleSubmit };
-    },
-  });
+      closeDrawer();
+      emit('success');
+    } finally {
+      setDrawerProps({ confirmLoading: false });
+    }
+  }
 </script>
