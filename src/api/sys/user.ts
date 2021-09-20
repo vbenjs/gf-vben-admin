@@ -26,7 +26,19 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
     {
       errorMessageMode: mode,
-      apiUrl: 'http://localhost:10088',
+      apiUrl: url,
+    },
+  );
+}
+export function registerApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post(
+    {
+      url: Api.Register,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+      apiUrl: url,
     },
   );
 }
