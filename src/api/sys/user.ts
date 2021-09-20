@@ -6,10 +6,12 @@ import { ErrorMessageMode } from '/#/axios';
 enum Api {
   Login = '/login',
   Logout = '/logout',
+  Register = '/register',
   GetPermCode = '/getPermCode',
   GetUserInfo = '/user/info',
   GetPermCodeByUserId = '/getPermCodeByUserId',
 }
+const url=`http://` + window.location.hostname + `:10088`
 
 /**
  * @description: user login api
@@ -22,7 +24,19 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
     {
       errorMessageMode: mode,
-      apiUrl: 'http://localhost:10088',
+      apiUrl: url,
+    },
+  );
+}
+export function registerApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post(
+    {
+      url: Api.Register,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+      apiUrl: url,
     },
   );
 }

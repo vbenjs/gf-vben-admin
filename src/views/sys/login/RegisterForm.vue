@@ -1,31 +1,32 @@
 <template>
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
-    <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
+
+    <Form class="p-4 enter-x" :model="formData" ref="formRef">
       <FormItem name="account" class="enter-x">
         <Input
           class="fix-auto-fill"
           size="large"
-          v-model:value="formData.account"
+          v-model:value="formData.username"
           :placeholder="t('sys.login.userName')"
         />
       </FormItem>
-      <FormItem name="mobile" class="enter-x">
-        <Input
-          size="large"
-          v-model:value="formData.mobile"
-          :placeholder="t('sys.login.mobile')"
-          class="fix-auto-fill"
-        />
-      </FormItem>
-      <FormItem name="sms" class="enter-x">
-        <CountdownInput
-          size="large"
-          class="fix-auto-fill"
-          v-model:value="formData.sms"
-          :placeholder="t('sys.login.smsCode')"
-        />
-      </FormItem>
+      <!--      <FormItem name="mobile" class="enter-x">-->
+      <!--        <Input-->
+      <!--          size="large"-->
+      <!--          v-model:value="formData.mobile"-->
+      <!--          :placeholder="t('sys.login.mobile')"-->
+      <!--          class="fix-auto-fill"-->
+      <!--        />-->
+      <!--      </FormItem>-->
+      <!--      <FormItem name="sms" class="enter-x">-->
+      <!--        <CountdownInput-->
+      <!--          size="large"-->
+      <!--          class="fix-auto-fill"-->
+      <!--          v-model:value="formData.sms"-->
+      <!--          :placeholder="t('sys.login.smsCode')"-->
+      <!--        />-->
+      <!--      </FormItem>-->
       <FormItem name="password" class="enter-x">
         <StrengthMeter
           size="large"
@@ -37,17 +38,17 @@
         <InputPassword
           size="large"
           visibilityToggle
-          v-model:value="formData.confirmPassword"
+          v-model:value="formData.password2"
           :placeholder="t('sys.login.confirmPassword')"
         />
       </FormItem>
 
-      <FormItem class="enter-x" name="policy">
-        <!-- No logic, you need to deal with it yourself -->
-        <Checkbox v-model:checked="formData.policy" size="small">
-          {{ t('sys.login.policy') }}
-        </Checkbox>
-      </FormItem>
+      <!--      <FormItem class="enter-x" name="policy">-->
+      <!--        &lt;!&ndash; No logic, you need to deal with it yourself &ndash;&gt;-->
+      <!--        <Checkbox v-model:checked="formData.policy" size="small">-->
+      <!--          {{ t('sys.login.policy') }}-->
+      <!--        </Checkbox>-->
+      <!--      </FormItem>-->
 
       <Button
         type="primary"
@@ -66,39 +67,38 @@
   </template>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, unref, computed } from 'vue';
-  import LoginFormTitle from './LoginFormTitle.vue';
-  import { Form, Input, Button, Checkbox } from 'ant-design-vue';
-  import { StrengthMeter } from '/@/components/StrengthMeter';
-  import { CountdownInput } from '/@/components/CountDown';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+import { reactive, ref, unref, computed } from 'vue';
+import LoginFormTitle from './LoginFormTitle.vue';
+import { Form, Input, Button, Checkbox } from 'ant-design-vue';
+import { StrengthMeter } from '/@/components/StrengthMeter';
+import { CountdownInput } from '/@/components/CountDown';
+import { useI18n } from '/@/hooks/web/useI18n';
+import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+import { registerApi } from '/@/api/sys/user';
 
-  const FormItem = Form.Item;
-  const InputPassword = Input.Password;
-  const { t } = useI18n();
-  const { handleBackLogin, getLoginState } = useLoginState();
+const FormItem = Form.Item;
+const InputPassword = Input.Password;
+const { t } = useI18n();
+const { handleBackLogin, getLoginState } = useLoginState();
 
-  const formRef = ref();
-  const loading = ref(false);
+const formRef = ref();
+const loading = ref(false);
 
-  const formData = reactive({
-    account: '',
-    password: '',
-    confirmPassword: '',
-    mobile: '',
-    sms: '',
-    policy: false,
-  });
+const formData = reactive({
+  username: '',
+  password: '',
+  password2: '',
+});
 
-  const { getFormRules } = useFormRules(formData);
-  const { validForm } = useFormValid(formRef);
+const { getFormRules } = useFormRules(formData);
+const { validForm } = useFormValid(formRef);
 
-  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
+const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
 
-  async function handleRegister() {
-    const data = await validForm();
-    if (!data) return;
-    console.log(data);
-  }
+async function handleRegister() {
+  // const data = await validForm();
+  // if (!data) return;
+  console.log(formData);
+  await registerApi(formData);
+}
 </script>
