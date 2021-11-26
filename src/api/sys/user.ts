@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, GetUserInfoModel } from './model/userModel';
+import { LoginParams } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 
@@ -8,7 +8,7 @@ enum Api {
   Logout = '/logout',
   Register = '/register',
   GetPermCode = '/getPermCode',
-  GetUserInfo = '/api/user/info',
+  GetUserInfo = '/user/info',
   GetPermCodeByUserId = '/getPermCodeByUserId',
 }
 const url=`http://` + window.location.hostname + `:10088`
@@ -45,7 +45,7 @@ export function registerApi(params: LoginParams, mode: ErrorMessageMode = 'modal
  * @description: getUserInfo
  */
 export function getUserInfo() {
-  return defHttp.get<GetUserInfoByUserIdModel>({
+  return defHttp.get({
     url: Api.GetUserInfo,
   });
 }

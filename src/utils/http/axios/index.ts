@@ -15,7 +15,7 @@ import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
-import { useUserStoreWithOut } from '/@/store/modules/user';
+// import { useUserStoreWithOut } from '/@/store/modules/user';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -58,24 +58,24 @@ const transform: AxiosTransform = {
       }
       return result;
     }
-      checkStatus(code, message, options.errorMessageMode);
-      // if (options.errorMessageMode === 'modal') {
-      //   createErrorModal({ title: t('sys.api.errorTip'), content: message });
-      // } else if (options.errorMessageMode === 'message') {
-      //   createMessage.error(message);
-      // }
-        // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-        if (options.errorMessageMode === 'modal') {
-          createErrorModal({ title: t('sys.api.errorTip'), content: message });
-        } else if (options.errorMessageMode === 'message') {
-          createMessage.error(message);
-        }
-      }
-      Promise.reject(new Error(message));
-      return message;
-
-
+    checkStatus(code, message, options.errorMessageMode);
+    // if (options.errorMessageMode === 'modal') {
+    //   createErrorModal({ title: t('sys.api.errorTip'), content: message });
+    // } else if (options.errorMessageMode === 'message') {
+    //   createMessage.error(message);
+    // }
+    // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
+    if (options.errorMessageMode === 'modal') {
+      createErrorModal({ title: t('sys.api.errorTip'), content: message });
+    } else if (options.errorMessageMode === 'message') {
+      createMessage.error(message);
+    }
   },
+  // Promise.reject(new Error(message));
+  // return message;
+
+
+
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {

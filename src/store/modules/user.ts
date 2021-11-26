@@ -113,7 +113,10 @@ export const useUserStore = defineStore({
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
       return userInfo;
-    }},
+    }catch (e) {
+        return null
+      }
+    },
     async getUserInfoAction() {
       const userInfo = await getUserInfo();
       const { roles } = userInfo;

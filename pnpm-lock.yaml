@@ -185,7 +185,7 @@ devDependencies:
   dotenv: 10.0.0
   eslint: 8.3.0
   eslint-config-prettier: 8.3.0_eslint@8.3.0
-  eslint-define-config: 1.1.4
+  eslint-define-config: 1.2.0
   eslint-plugin-jest: 25.3.0_4e52e098c69dc02e5d836ed593524821
   eslint-plugin-prettier: 4.0.0_d8c6a2a4ba8850181fffb74d8e835cec
   eslint-plugin-vue: 8.1.1_eslint@8.3.0
@@ -3416,7 +3416,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001283
-      electron-to-chromium: 1.4.1
+      electron-to-chromium: 1.4.2
       escalade: 3.1.1
       node-releases: 2.0.1
       picocolors: 1.0.0
@@ -4710,8 +4710,8 @@ packages:
       jake: 10.8.2
     dev: true
 
-  /electron-to-chromium/1.4.1:
-    resolution: {integrity: sha512-9ldvb6QMHiDpUNF1iSwBTiTT0qXEN+xIO5WlCJrC5gt0z74ofOiqR698vaJqYWnri0XZiF0YmnrFmGq/EmpGAA==}
+  /electron-to-chromium/1.4.2:
+    resolution: {integrity: sha512-SxHMmlSvpT83M/MLxTXQBqfqo3bK+UOk6Uup6w1paX86l+af1xwwTMLlyK3xJwE3Kq8/QnecuFKmnmRlAUJCXw==}
     dev: true
 
   /emittery/0.8.1:
@@ -5071,8 +5071,8 @@ packages:
       eslint: 8.3.0
     dev: true
 
-  /eslint-define-config/1.1.4:
-    resolution: {integrity: sha512-B1o0OTL32lPXwjjCpe+HtowrHqAlldInkU9PWVs+BsSi3E1GgjGIsiEz0g/1jHpBjP8zZMWh+DmdaB7gdLjUKQ==}
+  /eslint-define-config/1.2.0:
+    resolution: {integrity: sha512-EQ8d9F9LmJVRfkZW9WgSa5VBAVZialrLZKy0k1062zlhM8KFUyFoAC8xRI+mdp5m81FNMPnpKZfyq0AfJDyNTg==}
     engines: {node: '>= 16.9.0', npm: '>= 7.0.0', pnpm: '>= 6.17.0'}
     dev: true
 
