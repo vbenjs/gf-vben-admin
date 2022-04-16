@@ -10,6 +10,7 @@ enum Api {
   GetPermCode = '/getPermCode',
   GetUserInfo = '/user/info',
   GetPermCodeByUserId = '/getPermCodeByUserId',
+  TestRetry = '/testRetry',
 }
 const url=`http://` + window.location.hostname + `:10088`
 
@@ -53,4 +54,17 @@ export function getUserInfo() {
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });
+}
+
+export function testRetry() {
+  return defHttp.get(
+    { url: Api.TestRetry },
+    {
+      retryRequest: {
+        isOpenRetry: true,
+        count: 5,
+        waitTime: 1000,
+      },
+    },
+  );
 }
