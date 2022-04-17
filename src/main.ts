@@ -4,6 +4,11 @@ import '/@/design/index.less';
 import 'virtual:windi-utilities.css';
 // Register icon sprite
 import 'virtual:svg-icons-register';
+
+import 'xe-utils';
+import VXETable from 'vxe-table';
+import 'vxe-table/lib/style.css';
+
 import App from './App.vue';
 import { createApp } from 'vue';
 import { initAppConfigStore } from '/@/logics/initAppConfig';
@@ -45,6 +50,9 @@ async function bootstrap() {
 
   // https://next.router.vuejs.org/api/#isready
   // await router.isReady();
+
+  //use VxeTable
+  app.use(VXETable);
 
   app.mount('#app');
 }

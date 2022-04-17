@@ -9,10 +9,11 @@ enum Api {
   Register = '/register',
   GetPermCode = '/getPermCode',
   GetUserInfo = '/user/info',
+  GetMenu = '/user/menu',
   GetPermCodeByUserId = '/getPermCodeByUserId',
   TestRetry = '/testRetry',
 }
-const url=`http://` + window.location.hostname + `:10088`
+const url = `http://` + window.location.hostname + `:10088`;
 
 /**
  * @description: user login api
@@ -51,6 +52,11 @@ export function getUserInfo() {
   });
 }
 
+export function getUserMenu() {
+  return defHttp.get({
+    url: Api.GetMenu,
+  });
+}
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });

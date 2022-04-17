@@ -22,7 +22,7 @@ import { filter } from '/@/utils/helper/treeHelper';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
-import { Curd } from "/@/api/Curd";
+import { getUserMenu } from '/@/api/sys/user';
 
 interface PermissionState {
   // Permission code list
@@ -174,15 +174,15 @@ export const usePermissionStore = defineStore({
         //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
         case PermissionModeEnum.BACK:
           const { createMessage } = useMessage();
-          createMessage.loading(t('sys.app.menuLoading'),1);
+          createMessage.loading(t('sys.app.menuLoading'), 1);
 
           // !Simulate to obtain permission codes from the background,
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
           try {
             // this.changePermissionCode();
-            const { router }=await Curd({i:'router',a:'tree'})
-            routeList = router as AppRouteRecordRaw[]
+            const res = await getUserMenu();
+            routeList = res as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
           }
