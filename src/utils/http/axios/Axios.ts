@@ -114,7 +114,7 @@ export class VAxios {
       isFunction(responseInterceptorsCatch) &&
       this.axiosInstance.interceptors.response.use(undefined, (error) => {
         // @ts-ignore
-        responseInterceptorsCatch(this.axiosInstance, error);
+        return responseInterceptorsCatch(this.axiosInstance, error);
       });
   }
 
