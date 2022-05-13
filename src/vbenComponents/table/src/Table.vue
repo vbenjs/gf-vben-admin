@@ -1,0 +1,74 @@
+<script lang="ts" setup name="VbenTable">
+  import type { VbenTableProps } from './type';
+  import { computed, PropType, ref } from 'vue';
+  import { isFunction, isBoolean } from '/@/utils/is';
+
+  const props = defineProps({
+    options: {
+      type: Object as PropType<VbenTableProps>,
+      default: {},
+    },
+  });
+  const title = ref('');
+  const getProps = computed(() => {
+    const { options } = props;
+    title.value = options?.title || '';
+    delete options?.title;
+    getProxyConfig(options);
+    getPageConfig(options);
+    console.log(options);
+    return {
+      ...options,
+    };
+  });
+
+  const getProxyConfig = (options: VbenTableProps) => {
+    const { api, proxyConfig, data, afterFetch } = options;
+    if (proxyConfig || data) return;
+    if (api && isFunction(api)) {
+      options.proxyConfig = {
+        props: {
+          result: 'items', // 配置响应结果列表字段
+          total: 'total', // 配置响应结果总页数字段
+        },
+        ajax: {
+          query: async ({ page, sorts, filters, form }) => {
+            const { currentPage, pageSize } = page;
+            let res = await api({ ...options.params, page: currentPage, pageSize });
+            if (afterFetch && isFunction(afterFetch)) {
+              res = afterFetch(res);
+            }
+            return res || [];
+          },
+        },
+      };
+    }
+  };
+  const getPageConfig = (options: VbenTableProps) => {
+    const { pagination, pagerConfig } = options;
+    if (pagerConfig) return;
+
+    if (pagination) {
+      if (isBoolean(pagination)) {
+        options.pagerConfig = {
+          pageSize: 50,
+          pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000],
+        };
+        return;
+      }
+      options.pagerConfig = pagination;
+    }
+  };
+</script>
+<template>
+  <div class="m-2 p-2 bg-white">
+    <div v-if="title" class="flex m-2">
+      <div class="ml-2 text-xl">{{ title }}</div>
+    </div>
+    <vxeGrid v-bind="getProps">
+      <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
+        <slot :name="item" v-bind="data || {}"></slot>
+      </template>
+    </vxeGrid>
+  </div>
+</template>

@@ -5,10 +5,6 @@ import 'virtual:windi-utilities.css';
 // Register icon sprite
 import 'virtual:svg-icons-register';
 
-import 'xe-utils';
-import VXETable from 'vxe-table';
-import 'vxe-table/lib/style.css';
-
 import App from './App.vue';
 import { createApp } from 'vue';
 import { initAppConfigStore } from '/@/logics/initAppConfig';
@@ -20,9 +16,24 @@ import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 
+import 'xe-utils';
+import VXETable from 'vxe-table';
+import 'vxe-table/lib/style.css';
+
+import { initVbenComponent } from '/@/vbenComponents';
+import { NTag, NCard, NDivider, NSpace, NPopover, NButton } from 'naive-ui';
+
 async function bootstrap() {
   const app = createApp(App);
 
+  initVbenComponent(app, {
+    Tag: NTag,
+    Card: NCard,
+    Divider: NDivider,
+    Space: NSpace,
+    Popover: NPopover,
+    Button: NButton,
+  });
   // Configure store
   setupStore(app);
 
