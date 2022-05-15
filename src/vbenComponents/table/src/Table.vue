@@ -1,6 +1,6 @@
 <script lang="ts" setup name="VbenTable">
   import type { VbenTableProps } from './type';
-  import { computed, PropType, ref } from 'vue';
+  import { computed, PropType, ref, useSlots } from 'vue';
   import { isFunction, isBoolean } from '/@/utils/is';
 
   const props = defineProps({
@@ -16,7 +16,7 @@
     delete options?.title;
     getProxyConfig(options);
     getPageConfig(options);
-    console.log(options);
+    // console.log(options);
     return {
       ...options,
     };
@@ -59,6 +59,9 @@
       options.pagerConfig = pagination;
     }
   };
+  const slot = useSlots();
+
+  console.log(slot);
 </script>
 <template>
   <div class="m-2 p-2 bg-white">
