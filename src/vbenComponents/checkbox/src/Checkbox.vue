@@ -1,12 +1,12 @@
-<script lang="ts" setup name="VbenButton">
+<script lang="ts" setup name="VbenCheckbox">
   import { maps } from '/@/vbenComponents';
-  const Button = maps.get('Button');
+  const Checkbox = maps.get('Checkbox');
 </script>
 <template>
-  <Button v-bind="$attrs">
+  <Checkbox v-bind="$attrs">
     <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
       <slot :name="item" v-bind="data || {}"></slot> </template
-  ></Button>
+  ></Checkbox>
 </template>
 
 <style scoped></style>

@@ -1,12 +1,12 @@
-<script lang="ts" setup name="VbenButton">
+<script lang="ts" setup name="VbenEmpty">
   import { maps } from '/@/vbenComponents';
-  const Button = maps.get('Button');
+  const Empty = maps.get('Empty');
 </script>
 <template>
-  <Button v-bind="$attrs">
+  <Empty v-bind="$attrs">
     <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
       <slot :name="item" v-bind="data || {}"></slot> </template
-  ></Button>
+  ></Empty>
 </template>
 
 <style scoped></style>
