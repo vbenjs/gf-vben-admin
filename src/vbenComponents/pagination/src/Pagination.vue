@@ -1,12 +1,12 @@
-<script lang="ts" setup name="VbenButton">
+<script lang="ts" setup name="VbenPagination">
   import { maps } from '/@/vbenComponents';
-  const Button = maps.get('Button');
+  const Pagination = maps.get('Pagination');
 </script>
 <template>
-  <Button v-bind="$attrs">
+  <Pagination v-bind="$attrs">
     <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
       <slot :name="item" v-bind="data || {}"></slot> </template
-  ></Button>
+  ></Pagination>
 </template>
 
 <style scoped></style>
