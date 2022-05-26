@@ -1,9 +1,14 @@
 <template>
-  <ConfigProvider :locale="getAntdLocale">
-    <AppProvider>
-      <RouterView />
-    </AppProvider>
-  </ConfigProvider>
+  <VbenConfig>
+    <VbenMessageProvider>
+      <ConfigProvider :locale="getAntdLocale">
+        <AppProvider>
+          <RouterView />
+          <DogtagModal />
+        </AppProvider>
+      </ConfigProvider>
+    </VbenMessageProvider>
+  </VbenConfig>
 </template>
 
 <script lang="ts" setup>

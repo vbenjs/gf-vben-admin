@@ -1,7 +1,8 @@
 <script lang="ts" setup name="VbenTable">
   import type { VbenTableProps } from './type';
-  import { computed, PropType, ref, useSlots } from 'vue';
+  import { computed, PropType, ref, unref, useSlots } from 'vue';
   import { isFunction, isBoolean } from '/@/utils/is';
+  import { VxeTableInstance } from 'vxe-table';
 
   const props = defineProps({
     options: {
@@ -21,7 +22,15 @@
       ...options,
     };
   });
-
+  const xGrid = ref({} as VxeTableInstance);
+  const reload = () => {
+    const g = unref(xGrid);
+    if (!g) {
+      return;
+    }
+    g.commitProxy('query');
+  };
+  defineExpose({ reload });
   const getProxyConfig = (options: VbenTableProps) => {
     const { api, proxyConfig, data, afterFetch } = options;
     if (proxyConfig || data) return;
@@ -60,15 +69,13 @@
     }
   };
   const slot = useSlots();
-
-  console.log(slot);
 </script>
 <template>
   <div class="m-2 p-2 bg-white">
     <div v-if="title" class="flex m-2">
       <div class="ml-2 text-xl">{{ title }}</div>
     </div>
-    <vxeGrid v-bind="getProps">
+    <vxeGrid v-bind="getProps" ref="xGrid">
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>

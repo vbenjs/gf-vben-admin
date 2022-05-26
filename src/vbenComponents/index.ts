@@ -31,6 +31,9 @@ import { VbenEllipsis } from './ellipsis';
 import { VbenImage } from './image';
 import { VbenMessageProvider } from './message';
 import { VbenPagination } from './pagination';
+import { VbenRadio, VbenRadioButton, VbenRadioGroup } from './radio';
+import { VbenText } from './typography';
+import { VbenConfig } from './config';
 
 // 初始化组件
 // global 是否全局注册
@@ -68,5 +71,10 @@ export function initVbenComponent(app: App, comp: Object, global: boolean = true
     .use(VbenEllipsis)
     .use(VbenImage)
     .use(VbenMessageProvider)
-    .use(VbenPagination);
+    .use(VbenPagination)
+    .use(VbenRadio)
+    .use(VbenRadioGroup)
+    .use(VbenRadioButton)
+    .use(VbenText)
+    .use(VbenConfig);
 }
