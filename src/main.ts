@@ -20,12 +20,48 @@ import 'xe-utils';
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
 
-import { initVbenComponent } from '/@/vbenComponents';
-import { NTag, NCard, NDivider, NSpace, NPopover, NButton } from 'naive-ui';
+import { initVbenComponent, setMessage } from '/@/vbenComponents';
+
+import {
+  NTag,
+  NCard,
+  NDivider,
+  NSpace,
+  NPopover,
+  NButton,
+  NAvatar,
+  NStatistic,
+  NSelect,
+  NInput,
+  NThing,
+  NPopconfirm,
+  NIcon,
+  NCheckbox,
+  NCheckboxGroup,
+  NButtonGroup,
+  NModal,
+  NEmpty,
+  NUpload,
+  NUploadDragger,
+  NTabs,
+  NTabPane,
+  NGrid,
+  NGridItem,
+  NEllipsis,
+  NImage,
+  NMessageProvider,
+  useMessage,
+  NPagination,
+  NRadio,
+  NRadioButton,
+  NRadioGroup,
+  NText,
+  NConfigProvider,
+} from 'naive-ui';
 
 async function bootstrap() {
   const app = createApp(App);
-
+  await setupI18n(app);
   initVbenComponent(app, {
     Tag: NTag,
     Card: NCard,
@@ -33,7 +69,35 @@ async function bootstrap() {
     Space: NSpace,
     Popover: NPopover,
     Button: NButton,
+    ButtonGroup: NButtonGroup,
+    Avatar: NAvatar,
+    Statistic: NStatistic,
+    Select: NSelect,
+    Input: NInput,
+    Thing: NThing,
+    Popconfirm: NPopconfirm,
+    Icon: NIcon,
+    Checkbox: NCheckbox,
+    CheckboxGroup: NCheckboxGroup,
+    Modal: NModal,
+    Empty: NEmpty,
+    Upload: NUpload,
+    UploadDragger: NUploadDragger,
+    Tabs: NTabs,
+    TabPane: NTabPane,
+    Grid: NGrid,
+    GridItem: NGridItem,
+    Ellipsis: NEllipsis,
+    Image: NImage,
+    MessageProvider: NMessageProvider,
+    Pagination: NPagination,
+    Radio: NRadio,
+    RadioButton: NRadioButton,
+    RadioGroup: NRadioGroup,
+    Text: NText,
+    Config: NConfigProvider,
   });
+  setMessage(useMessage);
   // Configure store
   setupStore(app);
 
@@ -45,7 +109,6 @@ async function bootstrap() {
 
   // Multilingual configuration
   // Asynchronous case: language files may be obtained from the server side
-  await setupI18n(app);
 
   // Configure routing
   setupRouter(app);
