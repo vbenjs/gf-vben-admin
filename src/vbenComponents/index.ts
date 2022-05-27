@@ -1,5 +1,5 @@
 import type { Component, App } from 'vue';
-
+import VXETable from 'vxe-table';
 //组件map
 export const maps = new Map<String, Component>();
 export let useMsg = () => {};
@@ -41,7 +41,7 @@ export function initVbenComponent(app: App, comp: Object, global: boolean = true
   Object.keys(comp).forEach((k) => {
     maps.set(k, comp[k]);
   });
-
+  app.use(VXETable);
   if (!global) return;
   app
     .use(VbenCard)

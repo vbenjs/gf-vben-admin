@@ -16,10 +16,6 @@ import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 
-import 'xe-utils';
-import VXETable from 'vxe-table';
-import 'vxe-table/lib/style.css';
-
 import { initVbenComponent, setMessage } from '/@/vbenComponents';
 
 import {
@@ -124,9 +120,6 @@ async function bootstrap() {
 
   // https://next.router.vuejs.org/api/#isready
   // await router.isReady();
-
-  //use VxeTable
-  app.use(VXETable);
 
   app.mount('#app');
 }

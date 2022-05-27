@@ -25,7 +25,6 @@
   const value = ref([]);
   const emit = defineEmits(['update:value']);
   const option = computed(() => {
-    console.log(props.options);
     const { options } = props;
 
     return options
