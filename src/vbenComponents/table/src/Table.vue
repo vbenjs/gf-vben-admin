@@ -1,8 +1,16 @@
 <script lang="ts" setup name="VbenTable">
+  import 'xe-utils';
+
+  import 'vxe-table/lib/style.css';
   import type { VbenTableProps } from './type';
-  import { computed, PropType, ref, unref, useSlots } from 'vue';
-  import { isFunction, isBoolean } from '/@/utils/is';
+  import { computed, PropType, ref, unref, useSlots, watch } from 'vue';
+  import { isBoolean, isFunction } from '/@/utils/is';
   import { VxeTableInstance } from 'vxe-table';
+  import { theme, ThemeEnum } from '/@/vbenComponents/config/src/data';
+
+  if (theme.value == ThemeEnum.Dark) {
+    import('./scss/dark.scss');
+  }
 
   const props = defineProps({
     options: {
@@ -82,3 +90,4 @@
     </vxeGrid>
   </div>
 </template>
+<style lang="scss"></style>
