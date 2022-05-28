@@ -52,7 +52,7 @@
     "intro.js": "^5.1.0",
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",
-    "naive-ui": "^2.28.4",
+    "naive-ui": "^2.29.0",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^6.2.1",
     "pinia": "2.0.12",

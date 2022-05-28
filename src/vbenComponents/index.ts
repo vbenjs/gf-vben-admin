@@ -1,6 +1,6 @@
 import type { Component, App } from 'vue';
 import VXETable from 'vxe-table';
-//组件map
+//VC组件map
 export const maps = new Map<String, Component>();
 export let useMsg = () => {};
 export const setMessage = (func: Fn = () => {}) => {
@@ -9,7 +9,7 @@ export const setMessage = (func: Fn = () => {}) => {
 // 引入组件
 import { VbenPopover } from './popover';
 import { VbenDivider } from './divider';
-import { VbenTag } from './tag';
+import { VbenTag, VbenDynamicTags } from './tag';
 import { VbenTable } from './table';
 import { VbenCard } from './card';
 import { VbenSpace } from './space';
@@ -34,6 +34,8 @@ import { VbenPagination } from './pagination';
 import { VbenRadio, VbenRadioButton, VbenRadioGroup } from './radio';
 import { VbenText } from './typography';
 import { VbenConfig } from './config';
+import { VbenColorPicker } from './colorPicker';
+import { VbenDesc, VbenDescItem } from './descriptions';
 
 // 初始化组件
 // global 是否全局注册
@@ -76,5 +78,9 @@ export function initVbenComponent(app: App, comp: Object, global: boolean = true
     .use(VbenRadioGroup)
     .use(VbenRadioButton)
     .use(VbenText)
-    .use(VbenConfig);
+    .use(VbenConfig)
+    .use(VbenDynamicTags)
+    .use(VbenColorPicker)
+    .use(VbenDesc)
+    .use(VbenDescItem);
 }

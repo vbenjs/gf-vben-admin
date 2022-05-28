@@ -1,7 +1,7 @@
 <script lang="ts" setup name="VbenConfig">
   import { maps } from '/@/vbenComponents';
   import { theme, ThemeEnum } from './data';
-  import { darkTheme, dateZhCN } from 'naive-ui';
+  import { darkTheme, dateZhCN, zhCN } from 'naive-ui';
   import { computed } from 'vue';
 
   const Config = maps.get('Config');
@@ -10,7 +10,7 @@
   });
 </script>
 <template>
-  <Config v-bind="$attrs" :theme="themeValue" :date-locale="dateZhCN" abstract>
+  <Config v-bind="$attrs" :theme="themeValue" :date-locale="dateZhCN" :locale="zhCN" abstract>
     <slot></slot
   ></Config>
 </template>

@@ -18,6 +18,7 @@ import { registerGlobComp } from '/@/components/registerGlobComp';
 
 import { initVbenComponent, setMessage } from '/@/vbenComponents';
 
+// 按需导入组件
 import {
   NTag,
   NCard,
@@ -53,11 +54,17 @@ import {
   NRadioGroup,
   NText,
   NConfigProvider,
+  NDynamicTags,
+  NColorPicker,
+  NDescriptions,
+  NDescriptionsItem,
 } from 'naive-ui';
 
 async function bootstrap() {
   const app = createApp(App);
   await setupI18n(app);
+  //VBenComponents 缩写为 VC
+  // 注册组件至VC，入参：app
   initVbenComponent(app, {
     Tag: NTag,
     Card: NCard,
@@ -92,7 +99,12 @@ async function bootstrap() {
     RadioGroup: NRadioGroup,
     Text: NText,
     Config: NConfigProvider,
+    DynamicTags: NDynamicTags,
+    ColorPicker: NColorPicker,
+    Descriptions: NDescriptions,
+    DescriptionsItem: NDescriptionsItem,
   });
+  // 注册useMessage函数
   setMessage(useMessage);
   // Configure store
   setupStore(app);
