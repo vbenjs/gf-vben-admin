@@ -16,7 +16,7 @@ import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 
-import { initVbenComponent, setMessage } from '/@/vbenComponents';
+import { initVbenComponent, setMessage, setNotice } from '/@/vbenComponents';
 
 // 按需导入组件
 import {
@@ -58,6 +58,8 @@ import {
   NColorPicker,
   NDescriptions,
   NDescriptionsItem,
+  useNotification,
+  NNotificationProvider,
 } from 'naive-ui';
 
 async function bootstrap() {
@@ -103,9 +105,11 @@ async function bootstrap() {
     ColorPicker: NColorPicker,
     Descriptions: NDescriptions,
     DescriptionsItem: NDescriptionsItem,
+    NotificationProvider: NNotificationProvider,
   });
   // 注册useMessage函数
   setMessage(useMessage);
+  setNotice(useNotification);
   // Configure store
   setupStore(app);
 

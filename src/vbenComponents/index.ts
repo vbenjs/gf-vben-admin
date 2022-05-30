@@ -1,10 +1,37 @@
 import type { Component, App } from 'vue';
 import VXETable from 'vxe-table';
+
 //VC组件map
 export const maps = new Map<String, Component>();
-export let useMsg = () => {};
+
+//Notification 相关
+let registerNotice: Fn = () => {};
+export let notice = undefined;
+export const setNotice = (func: Fn = () => {}) => {
+  registerNotice = func;
+  console.log('useNotice已注册');
+};
+export let useNotice: Fn = () => {
+  notice = registerNotice();
+  if (!notice) {
+    console.log('注册失败');
+  }
+  return notice;
+};
+
+//Message 相关
+let registerMsg: Fn = () => {};
+export let msg = undefined;
+export let useMsg: Fn = () => {
+  msg = registerMsg();
+  if (!msg) {
+    console.log('注册失败');
+  }
+  return msg;
+};
 export const setMessage = (func: Fn = () => {}) => {
-  useMsg = func;
+  registerMsg = func;
+  console.log('useMsg已注册');
 };
 // 引入组件
 import { VbenPopover } from './popover';
@@ -36,6 +63,7 @@ import { VbenText } from './typography';
 import { VbenConfig } from './config';
 import { VbenColorPicker } from './colorPicker';
 import { VbenDesc, VbenDescItem } from './descriptions';
+import { VbenNotificationProvider } from './notification';
 
 // 初始化组件
 // global 是否全局注册
@@ -82,5 +110,6 @@ export function initVbenComponent(app: App, comp: Object, global: boolean = true
     .use(VbenDynamicTags)
     .use(VbenColorPicker)
     .use(VbenDesc)
-    .use(VbenDescItem);
+    .use(VbenDescItem)
+    .use(VbenNotificationProvider);
 }

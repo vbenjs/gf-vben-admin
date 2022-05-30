@@ -5,6 +5,7 @@
   import { prefixCls } from '/@/settings/designSetting';
   import { useAppStore } from '/@/store/modules/app';
   import { MenuModeEnum, MenuTypeEnum } from '/@/enums/menuEnum';
+  import { useMsg, useNotice } from '/@/vbenComponents';
 
   const props = {
     /**
@@ -22,6 +23,8 @@
       const isSetState = ref(false);
 
       const appStore = useAppStore();
+      useMsg();
+      useNotice();
 
       // Monitor screen breakpoint information changes
       createBreakpointListen(({ screenMap, sizeEnum, width }) => {
