@@ -199,6 +199,7 @@ const transform: AxiosTransform = {
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
   return new VAxios(
+    // 深度合并
     deepMerge(
       {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
