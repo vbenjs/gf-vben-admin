@@ -44,7 +44,7 @@ import { VbenButton, VbenButtonGroup } from './button';
 import { VbenAvatar } from './avatar';
 import { VbenStatistic } from './statistic';
 import { VbenSelect } from './select';
-import { VbenInput } from './input';
+import { VbenInput, VbenInputGroup } from './input';
 import { VbenThing } from './thing';
 import { VbenPopconfirm } from './popconfirm';
 import { VbenIcon } from './icon';
@@ -64,7 +64,14 @@ import { VbenConfig } from './config';
 import { VbenColorPicker } from './colorPicker';
 import { VbenDesc, VbenDescItem } from './descriptions';
 import { VbenNotificationProvider } from './notification';
-
+import { VbenTimePicker } from './timePicker';
+import { VbenDatePicker } from './datePicker';
+import { VbenInputNumber } from './inputNumber';
+import { VbenDrawer, VbenDrawerContent } from './drawer';
+import { VbenForm, VbenFormItem, VbenFormItemGi } from './form';
+import { VbenCascader } from './cascader';
+import { VbenDropdown } from './dropdown';
+export { theme } from './config';
 // 初始化组件
 // global 是否全局注册
 export function initVbenComponent(app: App, comp: Object, global: boolean = true) {
@@ -111,5 +118,16 @@ export function initVbenComponent(app: App, comp: Object, global: boolean = true
     .use(VbenColorPicker)
     .use(VbenDesc)
     .use(VbenDescItem)
-    .use(VbenNotificationProvider);
+    .use(VbenNotificationProvider)
+    .use(VbenTimePicker)
+    .use(VbenDatePicker)
+    .use(VbenInputNumber)
+    .use(VbenDrawer)
+    .use(VbenDrawerContent)
+    .use(VbenForm)
+    .use(VbenFormItemGi)
+    .use(VbenFormItem)
+    .use(VbenCascader)
+    .use(VbenDropdown)
+    .use(VbenInputGroup);
 }

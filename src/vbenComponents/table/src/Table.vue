@@ -7,11 +7,20 @@
   import { isBoolean, isFunction } from '/@/utils/is';
   import { VxeTableInstance } from 'vxe-table';
   import { theme, ThemeEnum } from '/@/vbenComponents/config/src/data';
-
   if (theme.value == ThemeEnum.Dark) {
     import('./scss/dark.scss');
   }
-
+  watch(
+    () => theme.value,
+    () => {
+      if (theme.value === ThemeEnum.Light) {
+        window.location.reload();
+      }
+    },
+  );
+  const titleClass = computed(() => {
+    return { backgroundColor: theme.value === ThemeEnum.Dark ? '#262626' : '#FFF' };
+  });
   const props = defineProps({
     options: {
       type: Object as PropType<VbenTableProps>,
@@ -79,7 +88,7 @@
   const slot = useSlots();
 </script>
 <template>
-  <div class="m-2 p-2 bg-white">
+  <div class="m-2 p-2" :style="titleClass">
     <div v-if="title" class="flex m-2">
       <div class="ml-2 text-xl">{{ title }}</div>
     </div>

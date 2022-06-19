@@ -1,7 +1,9 @@
-import { ref } from 'vue';
-export enum ThemeEnum {
-  Light,
-  Dark,
-}
+import { useAppStoreWithOut } from '/@/store/modules/app';
+import { computed } from 'vue';
 
-export const theme = ref(ThemeEnum.Dark);
+export enum ThemeEnum {
+  Light = 'light',
+  Dark = 'dark',
+}
+const appStore = useAppStoreWithOut();
+export const theme = computed(() => appStore.getDarkMode);
