@@ -60,6 +60,7 @@ import {
   NDescriptionsItem,
   useNotification,
   NNotificationProvider,
+  NSwitch,
 } from 'naive-ui';
 
 async function bootstrap() {
@@ -106,6 +107,7 @@ async function bootstrap() {
     Descriptions: NDescriptions,
     DescriptionsItem: NDescriptionsItem,
     NotificationProvider: NNotificationProvider,
+    Switch: NSwitch,
   });
   // 注册useMessage函数
   setMessage(useMessage);

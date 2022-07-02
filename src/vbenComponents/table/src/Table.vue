@@ -18,6 +18,7 @@
       }
     },
   );
+  const emit = defineEmits(['register']);
   const titleClass = computed(() => {
     return { backgroundColor: theme.value === ThemeEnum.Dark ? '#262626' : '#FFF' };
   });
@@ -27,9 +28,12 @@
       default: {},
     },
   });
+  const innerProps = ref<Partial<VbenTableProps>>();
+
   const title = ref('');
+
   const getProps = computed(() => {
-    const { options } = props;
+    const options = innerProps.value || props.options;
     title.value = options?.title || '';
     delete options?.title;
     getProxyConfig(options);
@@ -40,6 +44,7 @@
     };
   });
   const xGrid = ref({} as VxeTableInstance);
+
   const reload = () => {
     const g = unref(xGrid);
     if (!g) {
@@ -47,6 +52,7 @@
     }
     g.commitProxy('query');
   };
+
   defineExpose({ reload });
   const getProxyConfig = (options: VbenTableProps) => {
     const { api, proxyConfig, data, afterFetch } = options;
@@ -85,7 +91,10 @@
       options.pagerConfig = pagination;
     }
   };
-  const slot = useSlots();
+  const setProps = (prop: Partial<VbenTableProps>) => {
+    innerProps.value = { ...unref(innerProps), ...prop };
+  };
+  emit('register', { reload, setProps });
 </script>
 <template>
   <div class="m-2 p-2" :style="titleClass">

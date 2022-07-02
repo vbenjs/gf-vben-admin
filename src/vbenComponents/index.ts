@@ -71,6 +71,7 @@ import { VbenDrawer, VbenDrawerContent } from './drawer';
 import { VbenForm, VbenFormItem, VbenFormItemGi } from './form';
 import { VbenCascader } from './cascader';
 import { VbenDropdown } from './dropdown';
+import { VbenSwitch } from './switch';
 export { theme } from './config';
 // 初始化组件
 // global 是否全局注册
@@ -129,5 +130,6 @@ export function initVbenComponent(app: App, comp: Object, global: boolean = true
     .use(VbenFormItem)
     .use(VbenCascader)
     .use(VbenDropdown)
-    .use(VbenInputGroup);
+    .use(VbenInputGroup)
+    .use(VbenSwitch);
 }
